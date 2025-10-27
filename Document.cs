@@ -7,17 +7,22 @@ namespace LabWork
     // Модель документа: складається з секцій і виносок
     public class Document
     {
-        public List<Section> Sections { get; } = new List<Section>();
-        public List<Footnote> Footnotes { get; } = new List<Footnote>();
+        private readonly List<Section> _sections = new List<Section>();
+        private readonly List<Footnote> _footnotes = new List<Footnote>();
+
+        public IReadOnlyList<Section> Sections => _sections.AsReadOnly();
+        public IReadOnlyList<Footnote> Footnotes => _footnotes.AsReadOnly();
 
         public void AddSection(Section section)
         {
-            Sections.Add(section);
+            if (section == null) throw new ArgumentNullException(nameof(section));
+            _sections.Add(section);
         }
 
         public void AddFootnote(Footnote footnote)
         {
-            Footnotes.Add(footnote);
+            if (footnote == null) throw new ArgumentNullException(nameof(footnote));
+            _footnotes.Add(footnote);
         }
 
         // Просте рендерення у Markdown-подібний текст
@@ -58,23 +63,23 @@ namespace LabWork
 
     public class Section
     {
-        public string Heading { get; set; }
-        public string Content { get; set; }
+        public string Heading { get; }
+        public string Content { get; }
 
         public Section(string heading, string content)
         {
-            Heading = heading;
-            Content = content;
+            Heading = heading ?? throw new ArgumentNullException(nameof(heading));
+            Content = content ?? throw new ArgumentNullException(nameof(content));
         }
     }
 
     public class Footnote
     {
-        public string Text { get; set; }
+        public string Text { get; }
 
         public Footnote(string text)
         {
-            Text = text;
+            Text = text ?? throw new ArgumentNullException(nameof(text));
         }
     }
 }
