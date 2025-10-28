@@ -1,31 +1,51 @@
 ﻿using System;
+using LabWork.Builders;
 
 namespace LabWork
 {
-    internal class Program
+    internal static class Program
     {
-            internal static void Main(string[] args)
+        private static void Main(string[] args)
+        {
+            try
+            {
+                var builder = new SimpleDocumentBuilder();
+                var director = new Director();
+
+                ShowUserGuideDemo(director, builder);
+
+                // Повторно використовуємо builder для реліз-нотаток
+                builder.Reset()
+                       .AddHeading("Release Notes")
+                       .AddSection("v1.0", "Initial release with builder implementation.")
+                       .AddFootnote("See CHANGELOG for full details.");
+
+                ShowReleaseNotesDemo(builder);
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex);
+            }
+        }
+
+        private static void ShowUserGuideDemo(Director director, SimpleDocumentBuilder builder)
         {
             // Демонстрація використання патерну Builder для створення документації
-            var builder = new Builders.SimpleDocumentBuilder();
-            var director = new Builders.Director();
-
-            // Побудуємо короткий User Guide
             director.BuildUserGuide(builder);
-            var userGuide = builder.Build();
+            var userGuideDoc = builder.Build();
 
-            Console.WriteLine("--- User Guide ---\n");
-            Console.WriteLine(userGuide.Render());
+            Console.WriteLine("--- User Guide ---");
+            Console.WriteLine();
+            Console.WriteLine(userGuideDoc.Render());
+        }
 
-            // Приклад ручної побудови: секції + виноски
-            builder.Reset()
-                   .AddHeading("Release Notes")
-                   .AddSection("v1.0", "Initial release with builder implementation.")
-                   .AddFootnote("See CHANGELOG for full details.");
+        private static void ShowReleaseNotesDemo(SimpleDocumentBuilder builder)
+        {
+            var releaseNotesDoc = builder.Build();
 
-            var notes = builder.Build();
-            Console.WriteLine("--- Release Notes ---\n");
-            Console.WriteLine(notes.Render());
+            Console.WriteLine("--- Release Notes ---");
+            Console.WriteLine();
+            Console.WriteLine(releaseNotesDoc.Render());
         }
     }
 }
