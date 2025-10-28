@@ -1,18 +1,54 @@
 ﻿using System;
+using LabWork;
+using LabWork.Builders;
 
 namespace LabWork
 {
-    // Даний проект є шаблоном для виконання лабораторних робіт
-    // з курсу "Об'єктно-орієнтоване програмування та патерни проектування"
-    // Необхідно змінювати і дописувати код лише в цьому проекті
-    // Відео-інструкції щодо роботи з github можна переглянути 
-    // за посиланням https://www.youtube.com/@ViktorZhukovskyy/videos 
-    class Program
+    internal static class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            
-            Console.WriteLine("Hello World!");
+            try
+            {
+                IDocumentBuilder builder = new SimpleDocumentBuilder();
+                var director = new Director();
+
+                ShowUserGuideDemo(director, builder);
+
+                // Повторно використовуємо builder для реліз-нотаток
+                builder.Reset()
+                       .AddHeading("Release Notes")
+                       .AddSection("v1.0", "Initial release with builder implementation.")
+                       .AddFootnote("See CHANGELOG for full details.");
+
+                ShowReleaseNotesDemo(builder);
+            }
+            catch (Exception ex)
+            {
+                // Виводимо повну інформацію про виключення та повертаємо код помилки
+                Console.Error.WriteLine(ex.ToString());
+                Environment.Exit(1);
+            }
+        }
+
+        private static void ShowUserGuideDemo(Director director, IDocumentBuilder builder)
+        {
+            // Демонстрація використання патерну Builder для створення документації
+            director.BuildUserGuide(builder);
+            var userGuideDoc = builder.Build();
+
+            Console.WriteLine("--- User Guide ---");
+            Console.WriteLine();
+            Console.WriteLine(userGuideDoc.Render());
+        }
+
+        private static void ShowReleaseNotesDemo(IDocumentBuilder builder)
+        {
+            var releaseNotesDoc = builder.Build();
+
+            Console.WriteLine("--- Release Notes ---");
+            Console.WriteLine();
+            Console.WriteLine(releaseNotesDoc.Render());
         }
     }
 }
