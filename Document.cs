@@ -5,7 +5,7 @@ using System.Text;
 namespace LabWork
 {
     // Модель документа: складається з секцій і виносок
-    public class Document
+    public class Document : IDocument
     {
         private readonly List<Section> _sections = new List<Section>();
         private readonly List<Footnote> _footnotes = new List<Footnote>();

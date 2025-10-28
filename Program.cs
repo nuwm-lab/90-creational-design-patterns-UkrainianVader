@@ -1,4 +1,5 @@
 ﻿using System;
+using LabWork;
 using LabWork.Builders;
 
 namespace LabWork
@@ -9,7 +10,7 @@ namespace LabWork
         {
             try
             {
-                var builder = new SimpleDocumentBuilder();
+                IDocumentBuilder builder = new SimpleDocumentBuilder();
                 var director = new Director();
 
                 ShowUserGuideDemo(director, builder);
@@ -24,11 +25,13 @@ namespace LabWork
             }
             catch (Exception ex)
             {
-                Console.Error.WriteLine(ex);
+                // Виводимо повну інформацію про виключення та повертаємо код помилки
+                Console.Error.WriteLine(ex.ToString());
+                Environment.Exit(1);
             }
         }
 
-        private static void ShowUserGuideDemo(Director director, SimpleDocumentBuilder builder)
+        private static void ShowUserGuideDemo(Director director, IDocumentBuilder builder)
         {
             // Демонстрація використання патерну Builder для створення документації
             director.BuildUserGuide(builder);
@@ -39,7 +42,7 @@ namespace LabWork
             Console.WriteLine(userGuideDoc.Render());
         }
 
-        private static void ShowReleaseNotesDemo(SimpleDocumentBuilder builder)
+        private static void ShowReleaseNotesDemo(IDocumentBuilder builder)
         {
             var releaseNotesDoc = builder.Build();
 

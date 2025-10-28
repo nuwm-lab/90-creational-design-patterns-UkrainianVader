@@ -40,10 +40,15 @@ namespace LabWork.Builders
             return this;
         }
 
-        public Document Build()
+        /// <summary>
+        /// Повертає збудований документ як <see cref="IDocument"/>. Після повернення реалізація скидає внутрішній стан
+        /// (викликає <see cref="Reset"/>), щоб будівник можна було повторно використовувати.
+        /// Це поведінка, яку слід документувати для споживачів інтерфейсу.
+        /// </summary>
+        public IDocument Build()
         {
             var result = _document;
-            // Optionally reset so builder can be reused
+            // Reset builder so it can be reused by the caller. This behavior is intentional.
             Reset();
             return result;
         }
